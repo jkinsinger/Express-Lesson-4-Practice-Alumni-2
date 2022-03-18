@@ -17,4 +17,18 @@ router.get('/actors', function(req, res, next){
 });
 
 
+router.get('/specificActor', function(req, res, next){
+  models.actor
+    .findOne({
+      where: {
+        actor_id: 5
+      }
+  })
+    .then(actor => {
+      res.render('specificActor', {
+       actor: actor
+      });
+  });
+});
+
 module.exports = router;
