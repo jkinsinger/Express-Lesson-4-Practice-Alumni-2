@@ -31,4 +31,21 @@ router.get('/specificActor', function(req, res, next){
   });
 });
 
+router.get('/actor/:id', function(req, res, next) {
+  let actorId = parseInt(req.params.id);
+
+  models.actor
+    .findOne({
+      where: {
+        actor_id: actorId
+      }
+    })
+      .then(actor => {
+        res.render('specificActor', {
+          actor: actor
+        });
+      });
+});
+
+
 module.exports = router;
