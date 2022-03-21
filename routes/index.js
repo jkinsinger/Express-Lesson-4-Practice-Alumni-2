@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const mysql = require ('mysql2');
 const models = require('../models');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,7 +11,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/actors', function(req, res, next){
-  models.actor.findAll({}).then(actorsFound => {
+  models.actor
+    .findAll({
+      where: {
+        actor_id: {
+          [Op.gt]: 55
+        }
+      }
+  })
+  .then(actorsFound => {
     res.render('actors', {
       actors: actorsFound
     });
