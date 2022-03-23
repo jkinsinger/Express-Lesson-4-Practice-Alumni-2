@@ -14,17 +14,39 @@ router.get('/actors', function(req, res, next){
   models.actor
     .findAll({
       where: {
-        actor_id: {
+        [Op.and]: {
+          actor_id: {
           [Op.gt]: 55
+        },
+        last_name: {
+          [Op.like]: 'G%'
         }
       }
+    }
   })
-  .then(actorsFound => {
+  .then(data => {
     res.render('actors', {
-      actors: actorsFound
+      actors: data
     });
   });
 });
+
+
+// router.get('/actors', function(req, res, next){
+//   models.actor
+//     .findAll({
+//       where: {
+//         actor_id: {
+//           [Op.gt]: 55
+//         }
+//       }
+//   })
+//   .then(actorsFound => {
+//     res.render('actors', {
+//       actors: actorsFound
+//     });
+//   });
+// });
 
 
 router.get('/specificActor', function(req, res, next){
