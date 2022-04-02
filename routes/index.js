@@ -49,13 +49,23 @@ router.get('/', function(req, res, next) {
 // });
 
 
+// router.get('/actors', function(req, res, next) {
+//   models.actor.findAll({}).then(actorsFound => {
+//     res.render('actors', {
+//       actors: actorsFound
+//     });
+//   });
+// });
+
 router.get('/actors', function(req, res, next) {
-  models.actor.findAll({}).then(actorsFound => {
-    res.render('actors', {
-      actors: actorsFound
-    });
+  models.actor.findAll({}).then(foundActors => {
+    const mappedActors = foundActors.map(actor => ({
+      ActorId: actor.actor_id,
+      Name: `${actor.first_name} ${actor.last_name}`
+    }));
+    res.send(JSON.stringify(mappedActors));
   });
-});
+})
 
 router.post('/actor', (req, res) => {
   models.actor 
