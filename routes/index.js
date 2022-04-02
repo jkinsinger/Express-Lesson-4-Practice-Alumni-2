@@ -10,26 +10,26 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/actors', function(req, res, next){
-  models.actor
-    .findAll({
-      where: {
-        [Op.and]: {
-          actor_id: {
-          [Op.gt]: 55
-        },
-        last_name: {
-          [Op.like]: 'G%'
-        }
-      }
-    }
-  })
-  .then(data => {
-    res.render('actors', {
-      actors: data
-    });
-  });
-});
+// router.get('/actors', function(req, res, next){
+//   models.actor
+//     .findAll({
+//       where: {
+//         [Op.and]: {
+//           actor_id: {
+//           [Op.gt]: 55
+//         },
+//         last_name: {
+//           [Op.like]: 'G%'
+//         }
+//       }
+//     }
+//   })
+//   .then(data => {
+//     res.render('actors', {
+//       actors: data
+//     });
+//   });
+// });
 
 
 // router.get('/actors', function(req, res, next){
@@ -47,6 +47,33 @@ router.get('/actors', function(req, res, next){
 //     });
 //   });
 // });
+
+
+router.get('/actors', function(req, res, next) {
+  models.actor.findAll({}).then(actorsFound => {
+    res.render('actors', {
+      actors: actorsFound
+    });
+  });
+});
+
+router.post('/actor', (req, res) => {
+  models.actor 
+    .findOrCreate({
+      where: {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name
+      }
+    })
+
+    .spread(function(result, created){
+      if (created) {
+        res.redirect('/actors');
+      } else {
+        res.send('This actor already exists!');
+      }
+    });
+});
 
 
 router.get('/specificActor', function(req, res, next){
